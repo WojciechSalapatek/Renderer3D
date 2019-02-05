@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.9)
+project(Renderer)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_subdirectory(bitmap)
+add_subdirectory(context)
+
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+add_executable(Renderer main.cpp bitmap/Bitmap.cpp bitmap/Bitmap.h context/Point.cpp context/Point.h context/Vector4D.h context/Vector4D.cpp)
+target_link_libraries(Renderer ${SDL2_LIBRARIES})
