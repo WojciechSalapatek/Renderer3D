@@ -55,7 +55,7 @@ int main( int argc, char** argv )
     int passed = 0;
     long timer = 0;
     double delta = 0;
-    Point p1(0, -1,0,1);
+    Point p1(0, -0.9,0,1);
     Point p2(-0.9,0.9,0,1);
     Point p3(0.9,0.9,0,1);
 
@@ -78,27 +78,18 @@ int main( int argc, char** argv )
             }
         }
 
-
-//        p1.translate(0,0,delta/1000);
-//        p2.translate(0,0,delta/1000);
-//        p3.translate(0,0,delta/1000);
-
-//        p1.rotate(0,delta/1000.,0);
-//        p2.rotate(0,delta/1000.,0);
-//        p3.rotate(0,delta/1000.,0);
-
-        p1.rotate(-delta/700.,delta/700.,delta/900.);
-        p2.rotate(-delta/700.,delta/700.,delta/900.);
-        p3.rotate(-delta/700.,delta/700.,delta/900.);
+        p1.rotate(delta/900,delta/700.,delta/700);
+        p2.rotate(delta/900,delta/700.,delta/700);
+        p3.rotate(delta/900,delta/700.,delta/700);
 
         Matrix translation = Matrix::translation_matrix(0,0,5*cos(timer/1300.) + 7.5);
         Point pr1 = p1.transform(translation);
         Point pr2 = p2.transform(translation);
         Point pr3 = p3.transform(translation);
-        bitmap.clear_buffer();
+//        bitmap.clear_buffer();
         bitmap.clear();
         bitmap.draw_triangle(pr1, pr2, pr3);
-        bitmap.draw_buffer(1,720);
+//        bitmap.draw_buffer(1,720);
 
 
         SDL_UpdateTexture

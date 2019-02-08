@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "../context/Point.h"
+#include "../context/Edge.h"
 
 using std::vector;
 
@@ -24,7 +25,8 @@ public:
     void clear();
 private:
     void draw_edge(const Point &top, const Point &bottom, bool is_left);
-    void draw_sorted_triangle(const Point &top, const Point &mid, const Point &bottom, bool is_left);
+    void draw_edge(const Edge &left, const Edge &right, unsigned int y, unsigned char);
+    void draw_sorted_triangle(Point &top, Point &mid, Point &bottom, bool is_left);
     const unsigned int m_height;
     const unsigned int m_width;
     vector<unsigned char> m_pixels;
