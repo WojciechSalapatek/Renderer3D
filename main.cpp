@@ -17,7 +17,7 @@ int main( int argc, char** argv )
             (
                     "SDL2",
                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    800, 600,
+                    1280, 720,
                     SDL_WINDOW_SHOWN
             );
 
@@ -37,8 +37,8 @@ int main( int argc, char** argv )
         cout << SDL_GetPixelFormatName( info.texture_formats[i] ) << endl;
     }
 
-    const unsigned int texWidth = 1024;
-    const unsigned int texHeight = 1024;
+    const unsigned int texWidth = 1280;
+    const unsigned int texHeight = 720;
     SDL_Texture* texture = SDL_CreateTexture
             (
                     renderer,
@@ -51,14 +51,15 @@ int main( int argc, char** argv )
 
     SDL_Event event;
     bool running = true;
-    int curr =500;
-    unsigned int maxBlue = 256;
-    unsigned int maxRed = 256;
-    unsigned int maxGreen = 256;
-
-
-
+    int curr =0;
     int passed = 0;
+    long timer = 0;
+    double delta = 0;
+    Point p1(0, -1,0,1);
+    Point p2(-0.9,0.9,0,1);
+    Point p3(0.9,0.9,0,1);
+
+
     while( running )
     {
         curr++;
@@ -76,42 +77,29 @@ int main( int argc, char** argv )
                 break;
             }
         }
-//        if (curr > 500){
-//            maxBlue = rand() % 255 + 1;
-//            maxRed = rand() % 255 + 1;
-//            maxGreen = rand() % 255 + 1;
-//            curr = 0;
-//        }
-//        // splat down some random pixels
-//        for( unsigned int i = 0; i < 500; i++ )
-//        {
-//            unsigned int x = rand() % texWidth;
-//            unsigned int y = rand() % texHeight;
-//
-//            while(abs((int) (x-texWidth/2)) > rand()%texWidth/2){
-//                x = rand() % texWidth;
-//            }
-//
-//            while(abs((int) (y-texHeight/2)) > rand()%texHeight/2){
-//                y = rand() % texWidth;
-//            }
-//
-//            bitmap.set_pixel(x, y, rand() % maxRed, rand() % maxGreen, rand() % maxBlue, SDL_ALPHA_OPAQUE);
-//        }
 
-        //unsigned char* lockedPixels;
-        //int pitch;
-        //SDL_LockTexture
-        //    (
-        //    texture,
-        //    NULL,
-        //    reinterpret_cast< void** >( &lockedPixels ),
-        //    &pitch
-        //    );
-        //std::copy( pixels.begin(), pixels.end(), lockedPixels );
-        //SDL_UnlockTexture( texture );
 
-        bitmap.draw_buffer(1,800);
+//        p1.translate(0,0,delta/1000);
+//        p2.translate(0,0,delta/1000);
+//        p3.translate(0,0,delta/1000);
+
+//        p1.rotate(0,delta/1000.,0);
+//        p2.rotate(0,delta/1000.,0);
+//        p3.rotate(0,delta/1000.,0);
+
+        p1.rotate(-delta/700.,delta/700.,delta/900.);
+        p2.rotate(-delta/700.,delta/700.,delta/900.);
+        p3.rotate(-delta/700.,delta/700.,delta/900.);
+
+        Matrix translation = Matrix::translation_matrix(0,0,5*cos(timer/1300.) + 7.5);
+        Point pr1 = p1.transform(translation);
+        Point pr2 = p2.transform(translation);
+        Point pr3 = p3.transform(translation);
+        bitmap.clear_buffer();
+        bitmap.clear();
+        bitmap.draw_triangle(pr1, pr2, pr3);
+        bitmap.draw_buffer(1,720);
+
 
         SDL_UpdateTexture
                 (
@@ -126,18 +114,16 @@ int main( int argc, char** argv )
 
         const Uint64 end = SDL_GetPerformanceCounter();
         const static Uint64 freq = SDL_GetPerformanceFrequency();
-        const double delta = (( end - start ) / static_cast< double >( freq ))*1000.0;
+        delta = (( end - start ) / static_cast< double >( freq ))*1000.0;
         passed += delta;
         //cout << "Frame time : " <<  delta  << endl;
         if(passed >= 1000){
-            bitmap.clear();
-            bitmap.clear_buffer();
-            bitmap.draw_triangle(Point(rand() % 800,rand() % 600), Point(rand() % 800,rand() % 600), Point(rand() % 800,rand() % 600));
             passed = 0;
             cout << "FPS: " <<  curr  << endl;
             curr = 0;
         }
 
+        timer += delta;
     }
 
     SDL_DestroyRenderer( renderer );

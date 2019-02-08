@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "Vector4D.h"
+#include "Matrix.h"
 
 Vector4D::Vector4D(double m_x, double m_y, double m_z, double m_w) : m_x(m_x), m_y(m_y), m_z(m_z), m_w(m_w) {}
 
@@ -63,5 +64,64 @@ Vector4D& Vector4D::operator+(const Vector4D &other) {
     m_w += other.get_w();
     return *this;
 }
+
+double Vector4D::get(int i) const {
+    switch(i){
+        case 0:
+            return m_x;
+        case 1:
+            return m_y;
+        case 2:
+            return m_z;
+        case 3:
+            return m_w;
+    }
+}
+
+void Vector4D::set(int i, double val) {
+    switch(i){
+        case 0:
+            m_x = val;
+            break;
+        case 1:
+            m_y = val;
+            break;
+        case 2:
+            m_z = val;
+            break;
+        case 3:
+            m_w = val;
+            break;
+    }
+}
+
+Vector4D &Vector4D::translate(double x, double y, double z) {
+    Matrix::translation_matrix(x,y,z)*(*this);
+    return *this;
+}
+
+Vector4D &Vector4D::xrotate(double angle) {
+    Matrix::xrotaion_matrix(angle)*(*this);
+    return *this;
+}
+
+Vector4D &Vector4D::zrotate(double angle) {
+    Matrix::zrotaion_matrix(angle)*(*this);
+    return *this;
+}
+
+Vector4D &Vector4D::yrotate(double angle) {
+    Matrix::yrotaion_matrix(angle)*(*this);
+    return *this;;
+}
+
+void Vector4D::apply_perspective() {
+    if(m_w < 1)
+        return;
+    m_x /= m_w;
+    m_y /= m_w;
+    m_z /= m_w;
+}
+
 
 

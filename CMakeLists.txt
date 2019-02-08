@@ -8,5 +8,7 @@ add_subdirectory(context)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
-add_executable(Renderer main.cpp bitmap/Bitmap.cpp bitmap/Bitmap.h context/Point.cpp context/Point.h context/Vector4D.h context/Vector4D.cpp)
+add_executable(Renderer main.cpp bitmap/Bitmap.cpp bitmap/Bitmap.h context/Point.cpp
+        context/Point.h context/Vector4D.h context/Vector4D.cpp context/Matrix.cpp
+        context/Matrix.h)
 target_link_libraries(Renderer ${SDL2_LIBRARIES})

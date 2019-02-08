@@ -4,7 +4,7 @@ project(Renderer)
 set(HEDEAR_FILES Vector4D.h
         Point.h)
 set(SOURCE_FILES
-        Point.cpp Vector4D.cpp Vector4D.h)
+        Point.cpp Vector4D.cpp Vector4D.h Matrix.cpp Matrix.h)
 
 add_library(libcontext
         STATIC ${SOURCE_FILES}

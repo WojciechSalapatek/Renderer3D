@@ -19,7 +19,7 @@ public:
     void set_pixel(unsigned int x, unsigned int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     void update_line(unsigned int y, unsigned int x_min, unsigned int x_max);
     void draw_buffer(unsigned int y_min, unsigned int y_max);
-    void draw_triangle(const Point &p1, const Point &p2, const Point &p3);
+    void draw_triangle(Point &p1, Point &p2, Point &p3);
     void clear_buffer();
     void clear();
 private:
