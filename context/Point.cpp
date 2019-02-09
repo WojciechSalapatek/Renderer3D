@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Point.h"
 #include "Matrix.h"
+#include <sstream>
 
 double Point::get_x() const {
     return m_position.get_x();
@@ -57,6 +58,12 @@ Point &Point::to_pixels(unsigned int width, unsigned int height) {
 
 double Point::get_z() const {
     return m_position.get_z();
+}
+
+string Point::print() const{
+    std::ostringstream str;
+    str << "Point :" <<  m_position.get_x() << ", "<<  m_position.get_y() << ", "<<  m_position.get_z() << ", "<<  m_position.get_w();
+    return str.str();
 }
 
 

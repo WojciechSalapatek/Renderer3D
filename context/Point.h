@@ -8,6 +8,9 @@
 
 #include "Vector4D.h"
 #include "Matrix.h"
+#include <string>
+
+using std::string;
 
 class Point {
 public:
@@ -22,6 +25,7 @@ public:
     double get_x() const;
     double get_y() const;
     double get_z() const;
+    string print() const;
 
 private:
     Vector4D m_position;

@@ -4,12 +4,17 @@
 #include <vector>
 #include <random>
 #include "bitmap/Bitmap.h"
+#include "util/Obj.h"
+#include "context/Mesh.h"
 
 
 using namespace std;
 
 int main( int argc, char** argv )
 {
+
+    Obj obj = Obj::loadObj("monkey.obj");
+    Mesh monkey(obj);
     SDL_Init( SDL_INIT_EVERYTHING );
     atexit( SDL_Quit );
 
@@ -65,8 +70,8 @@ int main( int argc, char** argv )
         curr++;
         const Uint64 start = SDL_GetPerformanceCounter();
 
-        SDL_SetRenderDrawColor( renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
-        SDL_RenderClear( renderer );
+        //SDL_SetRenderDrawColor( renderer, 0, 0, 0, SDL_ALPHA_OPAQUE );
+        //SDL_RenderClear( renderer );
 
         while( SDL_PollEvent( &event ) )
         {
@@ -78,18 +83,10 @@ int main( int argc, char** argv )
             }
         }
 
-        p1.rotate(delta/900,delta/700.,delta/700);
-        p2.rotate(delta/900,delta/700.,delta/700);
-        p3.rotate(delta/900,delta/700.,delta/700);
-
-        Matrix translation = Matrix::translation_matrix(0,0,5*cos(timer/1300.) + 7.5);
-        Point pr1 = p1.transform(translation);
-        Point pr2 = p2.transform(translation);
-        Point pr3 = p3.transform(translation);
-//        bitmap.clear_buffer();
+        Matrix translation = Matrix::translation_matrix(0,-2,4*cos(timer/1000.) + 8);
         bitmap.clear();
-        bitmap.draw_triangle(pr1, pr2, pr3);
-//        bitmap.draw_buffer(1,720);
+        monkey.render(bitmap, translation);
+        //bitmap.draw_triangle(pr1, pr2, pr3);
 
 
         SDL_UpdateTexture
@@ -115,7 +112,9 @@ int main( int argc, char** argv )
         }
 
         timer += delta;
+        //running = false;
     }
+
 
     SDL_DestroyRenderer( renderer );
     SDL_DestroyWindow( window );

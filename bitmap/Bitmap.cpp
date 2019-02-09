@@ -3,25 +3,16 @@
 //
 
 #include "Bitmap.h"
-#include "../context/Edge.h"
-#include <algorithm>
-#include <iostream>
 #include <math.h>
+#include <iostream>
 
 Bitmap::Bitmap(unsigned int height, unsigned int width) : m_height(height), m_width(width){
     m_pixels.resize(m_width*m_height*4);
-    m_buffer.resize(m_height*2);
-    clear_buffer();
 }
 
 void Bitmap::clear() {
     m_pixels.clear();
     m_pixels.resize(m_width*m_height*4, 0);
-}
-
-void Bitmap::clear_buffer() {
-    m_buffer.clear();
-    m_buffer.resize(m_height*2, 0);
 }
 
 const unsigned int Bitmap::get_height() const {
@@ -45,62 +36,6 @@ Bitmap::set_pixel(unsigned int x, unsigned int y, unsigned char r, unsigned char
     m_pixels[pos + 3 ] = a;
 }
 
-void Bitmap::update_line(unsigned int y, unsigned int x_min, unsigned int x_max) {
-    m_buffer[2*y] = x_min;
-    m_buffer[2*y + 1] = x_max;
-}
-
-void Bitmap::draw_buffer(unsigned int y_min, unsigned int y_max) {
-    for (unsigned int i = y_min; i <= y_max; ++i) {
-        for (unsigned int j = m_buffer[i*2]; j < m_buffer[i*2 + 1]; ++j) {
-            if(j<0) continue;
-            else if(j > m_height) break;
-            set_pixel(i, j, 255, 255, 255, 0);
-        }
-    }
-
-}
-
-void Bitmap::draw_sorted_triangle(Point &top, Point &mid, Point &bottom, bool is_left) {
-    Edge top_mid(top, mid);
-    Edge top_bottom(top, bottom);
-    Edge mid_bottom(mid, bottom);
-
-    Edge *left = &top_bottom;
-    Edge *right = &top_mid;
-
-    if(is_left){
-        left = &top_mid;
-        right = &top_bottom;
-    }
-
-    for (unsigned int i = top_mid.get_y_min(); i < top_mid.get_y_max(); ++i){
-        draw_edge(*left, *right, i, 255);
-        left->step();
-        right->step();
-    }
-
-    left = &top_bottom;
-    right = &mid_bottom;
-
-    if(is_left){
-        left = &mid_bottom;
-        right = &top_bottom;
-    }
-
-    for (unsigned int i = mid_bottom.get_y_min(); i < mid_bottom.get_y_max(); ++i) {
-        draw_edge(*left, *right, i, 255);
-        left->step();
-        right->step();
-    }
-
-
-
-
-//    draw_edge(top, mid, !is_left);
-//    draw_edge(top, bottom, is_left);
-//    draw_edge(mid, bottom, !is_left);
-}
 
 void Bitmap::draw_edge(const Edge &left, const Edge &right, unsigned int y, unsigned char col) {
     for (auto j = (unsigned int)ceil(left.get_current_x());
@@ -111,18 +46,6 @@ void Bitmap::draw_edge(const Edge &left, const Edge &right, unsigned int y, unsi
     }
 }
 
-
-void Bitmap::draw_edge(const Point &top, const Point &bottom, bool is_left) {
-    double diff_x = bottom.get_x() - top.get_x();
-    double diff_y = (-top.get_y()+bottom.get_y());
-    double slope = diff_x/diff_y;
-    double x = top.get_x();
-
-    for (int i = (int) top.get_y(); i <= bottom.get_y(); ++i) {
-        m_buffer[2*i + (int) is_left] = (unsigned int) x;
-        x += slope;
-    }
-}
 
 void Bitmap::draw_triangle(Point &p1, Point &p2, Point &p3) {
     Matrix to_pixels = Matrix::to_pixels_matrix(m_width,m_height);
@@ -160,8 +83,61 @@ void Bitmap::draw_triangle(Point &p1, Point &p2, Point &p3) {
         return (ax -bx)*x/(ay-by) + ax - (ax -bx)*ay/(ay-by);
     }(mid->get_y(), top->get_x(),top->get_y(), bottom->get_x(), bottom->get_y());
 
-    bool is_left = mid->get_x() - pt  >= 0;
-    draw_sorted_triangle(*top, *mid, *bottom, !is_left);
+    bool is_left = mid->get_x() - pt  < 0;
+    //draw_sorted_triangle(*top, *mid, *bottom, !is_left);
+    Edge top_mid(*top, *mid);
+    Edge top_bottom(*top, *bottom);
+    Edge mid_bottom(*mid, *bottom);
+
+    Edge *left = &top_bottom;
+    Edge *right = &top_mid;
+
+    if(is_left){
+        left = &top_mid;
+        right = &top_bottom;
+    }
+
+    for (unsigned int i = top_mid.get_y_min(); i < top_mid.get_y_max(); ++i){
+        draw_edge(*left, *right, i, 255);
+        left->step();
+        right->step();
+    }
+
+    left = &top_bottom;
+    right = &mid_bottom;
+
+    if(is_left){
+        left = &mid_bottom;
+        right = &top_bottom;
+    }
+
+    for (unsigned int i = mid_bottom.get_y_min(); i < mid_bottom.get_y_max(); ++i) {
+        draw_edge(*left, *right, i, 255);
+        left->step();
+        right->step();
+    }
+}
+
+void Bitmap::render_obj(const Obj &object, Matrix &transform) {
+    for (int i = 0; i < object.get_faces().size(); i += 3) {
+        double x1 = object.get_vertices()[3*object.get_faces()[i]-3];
+        double y1 = object.get_vertices()[3*object.get_faces()[i]-2];
+        double z1 = object.get_vertices()[3*object.get_faces()[i]-1];
+        double x2 = object.get_vertices()[3*object.get_faces()[i+1]-3];
+        double y2 = object.get_vertices()[3*object.get_faces()[i+1]-2];
+        double z2 = object.get_vertices()[3*object.get_faces()[i+1]-1];
+        double x3 = object.get_vertices()[3*object.get_faces()[i+2]-3];
+        double y3 = object.get_vertices()[3*object.get_faces()[i+2]-2];
+        double z3 = object.get_vertices()[3*object.get_faces()[i+2]-1];
+        Point pp1(x1,y1,z1,1);
+        Point pp2(x2,y2,z2,1);
+        Point pp3(x3,y3,z3,1);
+        Point p1 = pp1.transform(transform);
+        Point p2 = pp2.transform(transform);
+        Point p3 = pp3.transform(transform);
+        draw_triangle(p1,p2,p3);
+    }
+
 }
 
 

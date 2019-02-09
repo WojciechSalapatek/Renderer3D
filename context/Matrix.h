@@ -12,8 +12,7 @@ using std::vector;
 
 class Matrix {
 public:
-    Matrix();
-    explicit Matrix(vector<vector<double>> &data) ;
+    explicit Matrix(vector<double> &data) ;
     static Matrix zeros();
     static Matrix identity();
     static Matrix projection_matrix(double fov, double aspect_ratio, double min, double max);
@@ -29,9 +28,8 @@ public:
     Vector4D& operator*(Vector4D &other);
 
 private:
-    vector<vector<double>> m_data;
+    vector<double> m_data;
 
-    static void fill_zeros(vector<vector<double>> &data);
 };
 
 
