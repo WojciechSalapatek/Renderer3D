@@ -37,11 +37,6 @@ Matrix Matrix::projection_matrix(double fov, double aspect_ratio, double min, do
     vector<double> data(16,0);
     data[0] = 1/(tang*aspect_ratio);   data[5]  = 1/tang;   data[10] = -(min+max)/z_range;
     data[11] = 2*min*max/z_range;      data[14] = 1;
-//    m.set(0,0, );
-//    m.set(1, 1, );
-//    m.set(2, 2, );
-//    m.set(2, 3, );
-//    m.set(3, 2, 1);
     Matrix m(data);
     return m;
 }
@@ -72,46 +67,46 @@ Matrix Matrix::translation_matrix(double x, double y, double z) {
 Matrix Matrix::xrotaion_matrix(double angle) {
     Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(1, 1, cos(angle));
-    m.set(1, 2, -sin(angle));
-    m.set(2, 1, sin(angle));
-    m.set(2, 2, cos(angle));
+    m.set(1, 1, cos(radians));
+    m.set(1, 2, -sin(radians));
+    m.set(2, 1, sin(radians));
+    m.set(2, 2, cos(radians));
     return m;
 }
 
 Matrix Matrix::zrotaion_matrix(double angle) {
     Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(0, 0, cos(angle));
-    m.set(0, 1, -sin(angle));
-    m.set(1, 0, sin(angle));
-    m.set(1, 1, cos(angle));
+    m.set(0, 0, cos(radians));
+    m.set(0, 1, -sin(radians));
+    m.set(1, 0, sin(radians));
+    m.set(1, 1, cos(radians));
     return m;
 }
 
 Matrix Matrix::yrotaion_matrix(double angle) {
     Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(0, 0, cos(angle));
-    m.set(0, 2, sin(angle));
-    m.set(2, 0, -sin(angle));
-    m.set(2, 2, cos(angle));
+    m.set(0, 0, cos(radians));
+    m.set(0, 2, sin(radians));
+    m.set(2, 0, -sin(radians));
+    m.set(2, 2, cos(radians));
     return m;
 }
 
 Matrix &Matrix::mul(Matrix &other) {
-//    vector<vector<double>> new_data(4, vector<double>(4,0));
-//    for (int i = 0; i < 4; ++i) {
-//        for (int j = 0; j < 4; ++j) {
-//            int current = 0;
-//            current += m_data[i][0] * other.get(0,j);
-//            current += m_data[i][1] * other.get(1,j);
-//            current += m_data[i][2] * other.get(2,j);
-//            current += m_data[i][3] * other.get(3,j);
-//            new_data[i][j] = current;
-//        }
-//    }
-//    m_data = new_data;
+    vector<double> new_data(16,0);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            double current = 0;
+            current += m_data[4*i] * other.get(0,j);
+            current += m_data[4*i+1] * other.get(1,j);
+            current += m_data[4*i+2] * other.get(2,j);
+            current += m_data[4*i+3] * other.get(3,j);
+            new_data[4*i+j] = current;
+        }
+    }
+    m_data = new_data;
 }
 
 Matrix Matrix::to_pixels_matrix(unsigned int width, unsigned int height) {

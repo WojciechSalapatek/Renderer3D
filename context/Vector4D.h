@@ -22,8 +22,9 @@ public:
     Vector4D &zrotate(double angle);
     Vector4D &yrotate(double angle);
 
-    Vector4D& operator*(double val);
-    Vector4D& operator+(const Vector4D &other);
+    Vector4D operator*(double val) const;
+    Vector4D operator+(const Vector4D &other) const;
+    Vector4D operator-(const Vector4D &other) const;
 
     void set(int i, double val);
     double get_x() const;

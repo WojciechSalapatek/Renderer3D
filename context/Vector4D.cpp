@@ -50,19 +50,28 @@ Vector4D& Vector4D::normalize() {
     return *this;
 }
 
-Vector4D& Vector4D::operator*(double val) {
-    m_x *= val;
-    m_y *= val;
-    m_z *= val;
-    m_w *= val;
+Vector4D Vector4D::operator*(double val) const{
+    Vector4D ret(m_x * val,
+                 m_y * val,
+                 m_z * val,
+                 m_w * val);
+    return ret;
 }
 
-Vector4D& Vector4D::operator+(const Vector4D &other) {
-    m_x += other.get_x();
-    m_y += other.get_y();
-    m_z += other.get_z();
-    m_w += other.get_w();
-    return *this;
+Vector4D Vector4D::operator+(const Vector4D &other) const{
+    Vector4D ret(m_x + other.get_x(),
+                 m_y + other.get_y(),
+                 m_z + other.get_z(),
+                 m_w + other.get_w());
+    return ret;
+}
+
+Vector4D Vector4D::operator-(const Vector4D &other) const{
+    Vector4D ret(m_x - other.get_x(),
+                 m_y - other.get_y(),
+                 m_z - other.get_z(),
+                 m_w - other.get_w());
+    return ret;
 }
 
 double Vector4D::get(int i) const {

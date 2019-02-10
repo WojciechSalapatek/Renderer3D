@@ -7,13 +7,15 @@
 
 
 #include "Point.h"
+#include "../util/Interpolator.h"
 
 class Edge {
 public:
-    Edge(Point &top, Point &bottom);
+    Edge(Point &top, Point &bottom, Interpolator &interpolator);
     void step();
 
     double get_current_x() const;
+    const Vector4D &get_current_color();
     unsigned int get_y_max() const;
     unsigned int get_y_min() const;
 
@@ -24,6 +26,8 @@ private:
     double m_current_x;
     unsigned int m_y_max;
     unsigned int m_y_min;
+    Vector4D m_current_color;
+    Vector4D m_color_step;
 };
 
 

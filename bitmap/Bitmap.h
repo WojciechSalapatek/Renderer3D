@@ -23,7 +23,7 @@ public:
     void clear();
     void render_obj(const Obj &object, Matrix&transform);
 private:
-    void draw_edge(const Edge &left, const Edge &right, unsigned int y, unsigned char);
+    void draw_edge(Edge &left, Edge &right, unsigned int y, unsigned char);
     const unsigned int m_height;
     const unsigned int m_width;
     vector<unsigned char> m_pixels;

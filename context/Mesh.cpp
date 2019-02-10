@@ -16,9 +16,9 @@ Mesh::Mesh(const Obj &object) {
         double x3 = object.get_vertices()[3*object.get_faces()[i+2]-3];
         double y3 = object.get_vertices()[3*object.get_faces()[i+2]-2];
         double z3 = object.get_vertices()[3*object.get_faces()[i+2]-1];
-        Point pp1(x1,y1,z1,1);
-        Point pp2(x2,y2,z2,1);
-        Point pp3(x3,y3,z3,1);
+        Point pp1(x1,y1,z1,1,255,0,0,0);
+        Point pp2(x2,y2,z2,1,0,0,255,0);
+        Point pp3(x3,y3,z3,1,0,255,0,0);
         m_ordered_points.push_back(pp1);
         m_ordered_points.push_back(pp2);
         m_ordered_points.push_back(pp3);

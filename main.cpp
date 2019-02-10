@@ -13,7 +13,7 @@ using namespace std;
 int main( int argc, char** argv )
 {
 
-    Obj obj = Obj::loadObj("monkey.obj");
+    Obj obj = Obj::loadObj("cube.obj");
     Mesh monkey(obj);
     SDL_Init( SDL_INIT_EVERYTHING );
     atexit( SDL_Quit );
@@ -60,10 +60,6 @@ int main( int argc, char** argv )
     int passed = 0;
     long timer = 0;
     double delta = 0;
-    Point p1(0, -0.9,0,1);
-    Point p2(-0.9,0.9,0,1);
-    Point p3(0.9,0.9,0,1);
-
 
     while( running )
     {
@@ -83,10 +79,19 @@ int main( int argc, char** argv )
             }
         }
 
-        Matrix translation = Matrix::translation_matrix(0,-2,4*cos(timer/1000.) + 8);
+        Point p1(0, 0, 5,       1, 255, 0   ,0   ,0 );
+        Point p2(0.5,  0.5, 5, 1, 0,   255 ,0   ,0 );
+        Point p3(-0.5, 0.5, 5, 1, 0,   0 ,  255 ,0 );
         bitmap.clear();
+        //bitmap.draw_triangle(p1,p2,p3);
+        Matrix translation = Matrix::translation_matrix(0,0,4.*cos(timer/1000.) + 8);
+        Matrix yrotation = Matrix::yrotaion_matrix(timer/10.);
+        Matrix xrotation = Matrix::xrotaion_matrix(timer/10.);
+        Matrix zrotation = Matrix::zrotaion_matrix(timer/10.);
+        xrotation.mul(zrotation);
+        yrotation.mul(xrotation);
+        translation.mul(yrotation);
         monkey.render(bitmap, translation);
-        //bitmap.draw_triangle(pr1, pr2, pr3);
 
 
         SDL_UpdateTexture

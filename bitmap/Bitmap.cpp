@@ -37,12 +37,15 @@ Bitmap::set_pixel(unsigned int x, unsigned int y, unsigned char r, unsigned char
 }
 
 
-void Bitmap::draw_edge(const Edge &left, const Edge &right, unsigned int y, unsigned char col) {
+void Bitmap::draw_edge(Edge &left, Edge &right, unsigned int y, unsigned char col) {
     for (auto j = (unsigned int)ceil(left.get_current_x());
          j < (unsigned int) ceil(right.get_current_x()); ++j) {
         if(j<0) continue;
         else if(j > m_height) break;
-        set_pixel(y, j, col, col, col, 0);
+        double curr = (j-ceil(left.get_current_x()))/((ceil(right.get_current_x()) - ceil(left.get_current_x())));
+        Vector4D color = left.get_current_color()*(1-curr) + right.get_current_color()*curr;
+        set_pixel(y, j, (unsigned char)color.get_x(), (unsigned char)color.get_y(),
+                  (unsigned char)color.get_z(), 0);
     }
 }
 
@@ -54,6 +57,12 @@ void Bitmap::draw_triangle(Point &p1, Point &p2, Point &p3) {
     Point topp = p1.transform(projection_matrix).apply_perspective().to_pixels(m_width, m_height);
     Point midp = p2.transform(projection_matrix).apply_perspective().to_pixels(m_width, m_height);
     Point bottomp = p3.transform(projection_matrix).apply_perspective().to_pixels(m_width, m_height);
+
+    double x1 = bottomp.get_x() - topp.get_x();
+    double y1 = bottomp.get_y() - topp.get_y();
+    double x2 = midp.get_x() - topp.get_x();
+    double y2 = midp.get_y() - topp.get_y();
+    if((x1*y2 - x2*y1) <0 ) return;
 
     Point *top = &topp;
     Point *mid = &midp;
@@ -85,9 +94,11 @@ void Bitmap::draw_triangle(Point &p1, Point &p2, Point &p3) {
 
     bool is_left = mid->get_x() - pt  < 0;
     //draw_sorted_triangle(*top, *mid, *bottom, !is_left);
-    Edge top_mid(*top, *mid);
-    Edge top_bottom(*top, *bottom);
-    Edge mid_bottom(*mid, *bottom);
+    Interpolator interpolator(*top,*mid,*bottom);
+    interpolator.interpolate(top->get_color(), mid->get_color(), bottom->get_color());
+    Edge top_mid(*top, *mid, interpolator);
+    Edge top_bottom(*top, *bottom, interpolator);
+    Edge mid_bottom(*mid, *bottom, interpolator);
 
     Edge *left = &top_bottom;
     Edge *right = &top_mid;
