@@ -15,16 +15,17 @@ public:
     Vector4D interpolate(const Vector4D &top_val, const Vector4D &mid_val,
                                       const Vector4D &bottom_val);
 
-    Vector4D& get_dfdx();
-    Vector4D& get_dfdy();
+    vector<Vector4D>& get_dfdx();
+    vector<Vector4D>& get_dfdy();
 
 private:
     const Point &m_top;
     const Point &m_mid;
     const Point &m_bottom;
     double m_dx;
-    Vector4D m_dfdx;
-    Vector4D m_dfdy;
+    unsigned int i;
+    vector<Vector4D> m_dfdx;
+    vector<Vector4D> m_dfdy;
 };
 
 

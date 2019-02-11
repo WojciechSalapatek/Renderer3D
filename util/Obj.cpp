@@ -23,7 +23,7 @@ Obj Obj::loadObj(string name) {
     string line;
     regex vertex {R"(^v (.*) (.*) (.*))"};
     regex normal {R"(^vn (.*) (.*) (.*))"};
-    regex face {R"(^f (\d+)//(\d+) (\d+)//(\d+) (\d+)//(\d+))"};
+    regex face {R"(^f (\d+)/.*/(\d+) (\d+)/.*/(\d+) (\d+)/.*/(\d+))"};
     int num = 0;
     if(!file){
         std::cerr<<"worng file: "<<"objects/"+name<<std::endl;

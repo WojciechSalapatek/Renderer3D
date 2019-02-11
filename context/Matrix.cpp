@@ -65,33 +65,30 @@ Matrix Matrix::translation_matrix(double x, double y, double z) {
 }
 
 Matrix Matrix::xrotaion_matrix(double angle) {
-    Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(1, 1, cos(radians));
-    m.set(1, 2, -sin(radians));
-    m.set(2, 1, sin(radians));
-    m.set(2, 2, cos(radians));
-    return m;
+    vector<double> data(16,0);
+    data[0] = 1;   data[5] = 1;   data[10] = 1;   data[15] = 1;
+    data[5] = cos(radians); data[6] = -sin(radians); data[9] = sin(radians); data[10] = cos(radians);
+    Matrix ret(data);
+    return ret;
 }
 
 Matrix Matrix::zrotaion_matrix(double angle) {
-    Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(0, 0, cos(radians));
-    m.set(0, 1, -sin(radians));
-    m.set(1, 0, sin(radians));
-    m.set(1, 1, cos(radians));
-    return m;
+    vector<double> data(16,0);
+    data[0] = cos(radians);   data[5] = cos(radians);   data[10] = 1;   data[15] = 1;
+    data[1] = -sin(radians); data[4] = sin(radians);
+    Matrix ret(data);
+    return ret;
 }
 
 Matrix Matrix::yrotaion_matrix(double angle) {
-    Matrix m = identity();
     double radians = angle*M_PI/180;
-    m.set(0, 0, cos(radians));
-    m.set(0, 2, sin(radians));
-    m.set(2, 0, -sin(radians));
-    m.set(2, 2, cos(radians));
-    return m;
+    vector<double> data(16,0);
+    data[0] = cos(radians);   data[5] = 1;   data[10] = cos(radians);   data[15] = 1;
+    data[2] = sin(radians); data[8] = -sin(radians);
+    Matrix ret(data);
+    return ret;
 }
 
 Matrix &Matrix::mul(Matrix &other) {

@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "Matrix.h"
 #include <sstream>
+#include <cmath>
 
 double Point::get_x() const {
     return m_position.get_x();
@@ -43,9 +44,11 @@ Point &Point::rotate(double x, double y, double z) {
 }
 
 Point Point::transform(Matrix &m) {
-    Vector4D new_pos(m_position.get_x(), m_position.get_y(), m_position.get_z(),
-                     m_position.get_w());
-    m*new_pos;
+    Vector4D new_pos(
+            m_position.get_x()*m.get(0,0) + m_position.get_y()*m.get(0,1)+ m_position.get_z()*m.get(0,2)+ m_position.get_w()*m.get(0,3),
+            m_position.get_x()*m.get(1,0) + m_position.get_y()*m.get(1,1)+ m_position.get_z()*m.get(1,2)+ m_position.get_w()*m.get(1,3),
+            m_position.get_x()*m.get(2,0) + m_position.get_y()*m.get(2,1)+ m_position.get_z()*m.get(2,2)+ m_position.get_w()*m.get(2,3),
+            m_position.get_x()*m.get(3,0) + m_position.get_y()*m.get(3,1)+ m_position.get_z()*m.get(3,2)+ m_position.get_w()*m.get(3,3));
     Point p(new_pos, m_color,m_normal);
     return p;
 }
@@ -72,6 +75,23 @@ const Vector4D &Point::get_color() const {
 
 const Vector4D &Point::get_normal() const {
     return m_normal;
+}
+
+const Vector4D &Point::get_position() const {
+    return m_position;
+}
+
+Point Point::apply_projection(double fov, double aspect_ratio, double min, double max) {
+    double tang = std::tan(fov / 2);
+    double z_range = min - max;
+    Vector4D new_pos(
+            get_x()/(tang*aspect_ratio),
+            get_y()/tang,
+            -get_z()*(min+max)/z_range + m_position.get_w()*2*min*max/z_range,
+            get_z()
+    );
+    Point ret(new_pos, m_color, m_normal);
+    return ret;
 }
 
 

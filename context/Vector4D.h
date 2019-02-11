@@ -9,6 +9,7 @@
 class Vector4D {
 
 public:
+    //Vector4D();
     Vector4D(double m_x, double m_y, double m_z, double m_w);
     double length() const;
     Vector4D &normalize();

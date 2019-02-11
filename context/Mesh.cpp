@@ -34,6 +34,7 @@ Mesh::Mesh(const Obj &object) {
         Point pp1(x1,y1,z1,1,255,255,255,0,x1n,y1n,z1n,0);
         Point pp2(x2,y2,z2,1,255,255,255,0,x2n,y2n,z2n,0);
         Point pp3(x3,y3,z3,1,255,255,255,0,x3n,y3n,z3n,0);
+
         m_ordered_points.push_back(pp1);
         m_ordered_points.push_back(pp2);
         m_ordered_points.push_back(pp3);

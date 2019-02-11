@@ -22,10 +22,12 @@ public:
     Point& rotate(double x, double y, double z);
     Point& to_pixels(unsigned int width, unsigned int height);
     Point apply_perspective();
+    Point apply_projection(double fov, double aspect_ratio, double min, double max);
     Point transform(Matrix &m);
     double get_x() const;
     double get_y() const;
     double get_z() const;
+    const Vector4D &get_position() const;
     const Vector4D &get_normal() const;
     const Vector4D &get_color() const;
     string print() const;

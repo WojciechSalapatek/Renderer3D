@@ -22,7 +22,7 @@ int main( int argc, char** argv )
             (
                     "Renderer",
                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    1280, 720,
+                    800, 600,
                     SDL_WINDOW_SHOWN
             );
 
@@ -42,8 +42,8 @@ int main( int argc, char** argv )
         cout << SDL_GetPixelFormatName( info.texture_formats[i] ) << endl;
     }
 
-    const unsigned int texWidth = 1280;
-    const unsigned int texHeight = 720;
+    const unsigned int texWidth = 800;
+    const unsigned int texHeight = 600;
     SDL_Texture* texture = SDL_CreateTexture
             (
                     renderer,
@@ -81,12 +81,12 @@ int main( int argc, char** argv )
 
         bitmap.clear();
         //bitmap.draw_triangle(p1,p2,p3);
-        Matrix translation = Matrix::translation_matrix(0,0,2);
+        Matrix translation = Matrix::translation_matrix(0,0.2,3);
         Matrix yrotation = Matrix::yrotaion_matrix(timer/10.);
         Matrix xrotation = Matrix::xrotaion_matrix(timer/10.);
         Matrix zrotation = Matrix::zrotaion_matrix(timer/10.);
-        //xrotation.mul(zrotation);
-        //yrotation.mul(xrotation);
+//        xrotation.mul(zrotation);
+//        yrotation.mul(xrotation);
         translation.mul(yrotation);
         monkey.render(bitmap, translation);
 

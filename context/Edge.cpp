@@ -6,8 +6,7 @@
 #include "Edge.h"
 #include "../util/Interpolator.h"
 
-Edge::Edge(Point &top, Point &bottom, Interpolator &color_interpolator, Interpolator &light_interpolator) : m_top_point(top), m_bottom_point(bottom), m_current_color(255,255,255,0),
-                                                                    m_color_step(0,0,0,0), m_current_lighting(1,1,1,0), m_lighting_step(0,0,0,0){
+Edge::Edge(Point &top, Point &bottom, Interpolator &interpolator) : m_top_point(top), m_bottom_point(bottom){
     double diff_x = bottom.get_x() - top.get_x();
     double diff_y = (-top.get_y()+bottom.get_y());
     m_slope = diff_x/diff_y;
@@ -15,21 +14,25 @@ Edge::Edge(Point &top, Point &bottom, Interpolator &color_interpolator, Interpol
     m_y_min = (unsigned int) ceil(top.get_y());
     m_y_max = (unsigned int) ceil(bottom.get_y());
 
-    m_current_color = top.get_color()+
-                      ((color_interpolator.get_dfdy()*(ceil(top.get_y()) - top.get_y()))) +
-                      (color_interpolator.get_dfdx()*(m_current_x-top.get_x()));
-    m_color_step = color_interpolator.get_dfdy() + (color_interpolator.get_dfdx()*m_slope);
+    m_current.reserve(3);
+    m_step.reserve(3);
 
-    m_current_lighting = top.get_normal()+
-                      ((light_interpolator.get_dfdy()*(ceil(top.get_y()) - top.get_y()))) +
-                      (light_interpolator.get_dfdx()*(m_current_x-top.get_x()));
-    m_lighting_step = light_interpolator.get_dfdy() + (light_interpolator.get_dfdx()*m_slope);
+
+    m_current[0] = ( calculate_current(top.get_color(), top, interpolator, 0));
+    m_step[0] = (interpolator.get_dfdy()[0] + (interpolator.get_dfdx()[0]*m_slope));
+
+    m_current[1] = ( calculate_current(top.get_normal(), top, interpolator, 1));
+    m_step[1] = (interpolator.get_dfdy()[1] + (interpolator.get_dfdx()[1]*m_slope));
+
+    m_current[2] = (calculate_current(top.get_position(), top, interpolator, 2));
+    m_step[2] = (interpolator.get_dfdy()[2] + (interpolator.get_dfdx()[2]*m_slope));
 }
 
 void Edge::step() {
     m_current_x += m_slope;
-    m_current_color = m_current_color+m_color_step;
-    m_current_lighting = m_current_lighting+m_lighting_step;
+    for (int i = 0; i < 3; ++i) {
+        m_current[i] = m_current[i] + m_step[i];
+    }
 }
 
 double Edge::get_current_x() const {
@@ -44,11 +47,13 @@ unsigned int Edge::get_y_min() const {
     return m_y_min;
 }
 
-const Vector4D &Edge::get_current_color() {
-    return m_current_color;
+const vector<Vector4D> &Edge::get_current() {
+    return m_current;
 }
 
-const Vector4D &Edge::get_current_lighting() const {
-    return m_current_lighting;
+Vector4D Edge::calculate_current(const Vector4D &val, const Point &top, Interpolator &interpolator, int i) {
+    return val +
+           ((interpolator.get_dfdy()[i]*(ceil(top.get_y()) - top.get_y()))) +
+           (interpolator.get_dfdx()[i]*(m_current_x-top.get_x()));
 }
 
