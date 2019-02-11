@@ -12,7 +12,7 @@ double Vector4D::length() const {
     return std::sqrt(m_x*m_x + m_y*m_y + m_z*m_z + m_w*m_w);
 }
 
-double Vector4D::dot_product(const Vector4D &other) {
+double Vector4D::dot_product(const Vector4D &other) const{
     return m_x*other.get_x() + m_y*other.get_y() + m_z*other.get_z() + m_w*other.get_w();
 }
 

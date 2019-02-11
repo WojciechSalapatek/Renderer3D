@@ -43,7 +43,14 @@ void Bitmap::draw_edge(Edge &left, Edge &right, unsigned int y, unsigned char co
         if(j<0) continue;
         else if(j > m_height) break;
         double curr = (j-ceil(left.get_current_x()))/((ceil(right.get_current_x()) - ceil(left.get_current_x())));
-        Vector4D color = left.get_current_color()*(1-curr) + right.get_current_color()*curr;
+        Vector4D light_dir(0,0,1,0);
+        double l_light = left.get_current_lighting().dot_product(light_dir);
+        double r_light = right.get_current_lighting().dot_product(light_dir);
+        double light = l_light*(1-curr)+r_light*curr;
+        if(light < 0) light = 0;
+        else if(light > 1) light = 1;
+
+        Vector4D color = (left.get_current_color()*(1-curr) + right.get_current_color()*curr)*(light*0.9 + 0.1);
         set_pixel(y, j, (unsigned char)color.get_x(), (unsigned char)color.get_y(),
                   (unsigned char)color.get_z(), 0);
     }
@@ -94,11 +101,13 @@ void Bitmap::draw_triangle(Point &p1, Point &p2, Point &p3) {
 
     bool is_left = mid->get_x() - pt  < 0;
     //draw_sorted_triangle(*top, *mid, *bottom, !is_left);
-    Interpolator interpolator(*top,*mid,*bottom);
-    interpolator.interpolate(top->get_color(), mid->get_color(), bottom->get_color());
-    Edge top_mid(*top, *mid, interpolator);
-    Edge top_bottom(*top, *bottom, interpolator);
-    Edge mid_bottom(*mid, *bottom, interpolator);
+    Interpolator c_interpolator(*top,*mid,*bottom);
+    Interpolator l_interpolator(*top,*mid,*bottom);
+    c_interpolator.interpolate(top->get_color(), mid->get_color(), bottom->get_color());
+    l_interpolator.interpolate(top->get_normal(), mid->get_normal(), bottom->get_normal());
+    Edge top_mid(*top, *mid, c_interpolator, l_interpolator);
+    Edge top_bottom(*top, *bottom, c_interpolator, l_interpolator);
+    Edge mid_bottom(*mid, *bottom, c_interpolator, l_interpolator);
 
     Edge *left = &top_bottom;
     Edge *right = &top_mid;
@@ -140,9 +149,9 @@ void Bitmap::render_obj(const Obj &object, Matrix &transform) {
         double x3 = object.get_vertices()[3*object.get_faces()[i+2]-3];
         double y3 = object.get_vertices()[3*object.get_faces()[i+2]-2];
         double z3 = object.get_vertices()[3*object.get_faces()[i+2]-1];
-        Point pp1(x1,y1,z1,1);
-        Point pp2(x2,y2,z2,1);
-        Point pp3(x3,y3,z3,1);
+        Point pp1(x1,y1,z1,1,255,255,255,0,0,0,0,0);
+        Point pp2(x2,y2,z2,1,255,255,255,0,0,0,0,0);
+        Point pp3(x3,y3,z3,1,255,255,255,0,0,0,0,0);
         Point p1 = pp1.transform(transform);
         Point p2 = pp2.transform(transform);
         Point p3 = pp3.transform(transform);

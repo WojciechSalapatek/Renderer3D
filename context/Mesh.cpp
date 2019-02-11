@@ -6,19 +6,34 @@
 #include "Point.h"
 
 Mesh::Mesh(const Obj &object) {
-    for (int i = 0; i < object.get_faces().size(); i += 3) {
+    for (int i = 0; i < object.get_faces().size(); i += 6) {
         double x1 = object.get_vertices()[3*object.get_faces()[i]-3];
         double y1 = object.get_vertices()[3*object.get_faces()[i]-2];
         double z1 = object.get_vertices()[3*object.get_faces()[i]-1];
+
         double x2 = object.get_vertices()[3*object.get_faces()[i+1]-3];
         double y2 = object.get_vertices()[3*object.get_faces()[i+1]-2];
         double z2 = object.get_vertices()[3*object.get_faces()[i+1]-1];
+
         double x3 = object.get_vertices()[3*object.get_faces()[i+2]-3];
         double y3 = object.get_vertices()[3*object.get_faces()[i+2]-2];
         double z3 = object.get_vertices()[3*object.get_faces()[i+2]-1];
-        Point pp1(x1,y1,z1,1,255,0,0,0);
-        Point pp2(x2,y2,z2,1,0,0,255,0);
-        Point pp3(x3,y3,z3,1,0,255,0,0);
+
+        double x1n = object.get_normals()[3*object.get_faces()[i+3]-3];
+        double y1n = object.get_normals()[3*object.get_faces()[i+3]-2];
+        double z1n = object.get_normals()[3*object.get_faces()[i+3]-1];
+
+        double x2n = object.get_normals()[3*object.get_faces()[i+4]-3];
+        double y2n = object.get_normals()[3*object.get_faces()[i+4]-2];
+        double z2n = object.get_normals()[3*object.get_faces()[i+4]-1];
+
+        double x3n = object.get_normals()[3*object.get_faces()[i+5]-3];
+        double y3n = object.get_normals()[3*object.get_faces()[i+5]-2];
+        double z3n = object.get_normals()[3*object.get_faces()[i+5]-1];
+
+        Point pp1(x1,y1,z1,1,255,255,255,0,x1n,y1n,z1n,0);
+        Point pp2(x2,y2,z2,1,255,255,255,0,x2n,y2n,z2n,0);
+        Point pp3(x3,y3,z3,1,255,255,255,0,x3n,y3n,z3n,0);
         m_ordered_points.push_back(pp1);
         m_ordered_points.push_back(pp2);
         m_ordered_points.push_back(pp3);

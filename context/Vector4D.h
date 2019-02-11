@@ -12,7 +12,7 @@ public:
     Vector4D(double m_x, double m_y, double m_z, double m_w);
     double length() const;
     Vector4D &normalize();
-    double dot_product(const Vector4D &other);
+    double dot_product(const Vector4D &other) const;
     Vector4D &cross_product(const Vector4D &other);
     void apply_perspective();
 

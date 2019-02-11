@@ -11,11 +11,12 @@
 
 class Edge {
 public:
-    Edge(Point &top, Point &bottom, Interpolator &interpolator);
+    Edge(Point &top, Point &bottom, Interpolator &color_interpolator, Interpolator &light_interpolator);
     void step();
 
     double get_current_x() const;
     const Vector4D &get_current_color();
+    const Vector4D &get_current_lighting() const;
     unsigned int get_y_max() const;
     unsigned int get_y_min() const;
 
@@ -28,6 +29,8 @@ private:
     unsigned int m_y_min;
     Vector4D m_current_color;
     Vector4D m_color_step;
+    Vector4D m_current_lighting;
+    Vector4D m_lighting_step;
 };
 
 

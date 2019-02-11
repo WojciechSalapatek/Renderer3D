@@ -15,14 +15,11 @@ double Point::get_y() const {
     return m_position.get_y();
 }
 
-Point::Point(double x, double y) : m_position(x,y,0,1), m_color(255,255,255,0) {}
+Point::Point(double x, double y, double z, double w, double r, double g, double b, double a,
+             double xn, double yn, double zn, double wn) :
+        m_position(x,y,z,w),  m_color(r,g,b,a), m_normal(xn,yn,zn,wn) {}
 
-Point::Point(double x, double y, double z, double w) : m_position(x,y,z,w),  m_color(255,255,255,0) {}
-
-Point::Point(double x, double y, double z, double w, double r, double g, double b, double a) :
-        m_position(x,y,z,w),  m_color(r,g,b,a) {}
-
-Point::Point(Vector4D &position, Vector4D &color) : m_position(position), m_color(color) {}
+Point::Point(Vector4D &position, Vector4D &color, Vector4D &normal) : m_position(position), m_color(color), m_normal(normal) {}
 
 Point &Point::translate(double x, double y, double z) {
     m_position.translate(x,y,z);
@@ -34,7 +31,7 @@ Point Point::apply_perspective() {
     Vector4D new_pos(m_position.get_x(), m_position.get_y(), m_position.get_z(),
                      m_position.get_w());
     new_pos.apply_perspective();
-    Point p(new_pos, m_color);
+    Point p(new_pos, m_color, m_normal);
     return p;
 }
 
@@ -49,7 +46,7 @@ Point Point::transform(Matrix &m) {
     Vector4D new_pos(m_position.get_x(), m_position.get_y(), m_position.get_z(),
                      m_position.get_w());
     m*new_pos;
-    Point p(new_pos, m_color);
+    Point p(new_pos, m_color,m_normal);
     return p;
 }
 
@@ -71,6 +68,10 @@ string Point::print() const{
 
 const Vector4D &Point::get_color() const {
     return m_color;
+}
+
+const Vector4D &Point::get_normal() const {
+    return m_normal;
 }
 
 
