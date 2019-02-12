@@ -49,7 +49,7 @@ void Bitmap::draw_edge(Edge &left, Edge &right, unsigned int y, unsigned char co
     for (auto j = (unsigned int)ceil(left.get_current_x());
          j < (unsigned int) ceil(right.get_current_x()); ++j) {
         double curr = (j-ceil(left.get_current_x()))/((ceil(right.get_current_x()) - ceil(left.get_current_x())));
-        if(depth > m_depth_buffer[y*m_height + j]){ return;}
+        if(depth > m_depth_buffer[y*m_height + j]){ continue;}
         m_depth_buffer[y*m_height + j] = depth;
         Vector4D light_dir(0,0,1,0);
         double l_light = left.get_current()[1].dot_product(light_dir);

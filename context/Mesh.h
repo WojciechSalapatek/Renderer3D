@@ -9,11 +9,12 @@
 #include "../util/Obj.h"
 #include "Point.h"
 #include "../bitmap/Bitmap.h"
+#include "Camera.h"
 
 class Mesh {
 public:
     explicit Mesh(const Obj &object);
-    void render(Bitmap &renderer, Matrix &transform);
+    void render(Bitmap &renderer, Matrix &transform, Camera &camera);
 
 private:
     vector<Point> m_ordered_points;

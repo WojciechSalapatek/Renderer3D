@@ -114,6 +114,19 @@ Matrix Matrix::to_pixels_matrix(unsigned int width, unsigned int height) {
     return m;
 }
 
+Matrix Matrix::camera_rotation_matrix(Vector4D &forward, Vector4D &up) {
+    vector<double> data(16,0);
+    forward.normalize();
+    up.normalize();
+    Vector4D r = up.cross_product(forward);
+    Vector4D u = forward.cross_product(r);
+    data[0] = r.get_x();   data[1] = r.get_y();   data[2] = r.get_z();
+    data[4] = u.get_x();   data[5] = u.get_y();   data[6] = u.get_z();
+    data[8] = forward.get_x();   data[9] = forward.get_y();   data[10] = forward.get_z();
+    data[15] = 1;
+    return Matrix(data);
+}
+
 
 
 

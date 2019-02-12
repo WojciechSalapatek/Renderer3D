@@ -5,6 +5,7 @@
 #include <cmath>
 #include "Vector4D.h"
 #include "Matrix.h"
+#include "Quaternion.h"
 
 Vector4D::Vector4D(double m_x, double m_y, double m_z, double m_w) : m_x(m_x), m_y(m_y), m_z(m_z), m_w(m_w) {}
 
@@ -32,7 +33,7 @@ double Vector4D::get_w() const {
     return m_w;
 }
 
-Vector4D& Vector4D::cross_product(const Vector4D &other) {
+Vector4D Vector4D::cross_product(const Vector4D &other) {
     double x = m_y * other.get_z() - m_z * other.get_y();
     double y = m_z * other.get_x() - m_x * other.get_z();
     double z = m_x * other.get_y() - m_y * other.get_x();
@@ -130,6 +131,20 @@ void Vector4D::apply_perspective() {
     m_x /= m_w;
     m_y /= m_w;
     m_z /= m_w;
+}
+
+Vector4D &Vector4D::rotate(double angle, const Vector4D &axis) {
+    double radians = (angle*M_PI/180)/2;
+    Quaternion rot(axis.get_x()*sin(radians), axis.get_y()*sin(radians), axis.get_z()*sin(radians), cos(radians));
+    Quaternion rot_con = rot.conjugate();
+
+    Quaternion apply = (rot.mul(*this)).mul(rot_con);
+
+    m_x = apply.get_x();
+    m_y = apply.get_y();
+    m_z = apply.get_z();
+
+    return *this;
 }
 
 //Vector4D::Vector4D() : m_x(0), m_y(0), m_z(0), m_w(0){}

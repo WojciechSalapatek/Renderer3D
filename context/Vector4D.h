@@ -14,7 +14,7 @@ public:
     double length() const;
     Vector4D &normalize();
     double dot_product(const Vector4D &other) const;
-    Vector4D &cross_product(const Vector4D &other);
+    Vector4D cross_product(const Vector4D &other);
     void apply_perspective();
 
     Vector4D &translate(double x, double y, double z);
@@ -22,6 +22,7 @@ public:
     Vector4D &xrotate(double angle);
     Vector4D &zrotate(double angle);
     Vector4D &yrotate(double angle);
+    Vector4D &rotate(double angle, const Vector4D &axis);
 
     Vector4D operator*(double val) const;
     Vector4D operator+(const Vector4D &other) const;

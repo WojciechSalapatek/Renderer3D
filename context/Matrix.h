@@ -21,6 +21,7 @@ public:
     static Matrix yrotaion_matrix(double angle);
     static Matrix zrotaion_matrix(double angle);
     static Matrix to_pixels_matrix(unsigned int width, unsigned int height);
+    static Matrix camera_rotation_matrix(Vector4D &forward, Vector4D &up);
     Matrix &mul(Matrix &other);
     double get(int i, int j) const;
     double set(int i, int j, double val);
