@@ -8,6 +8,7 @@ Camera::Camera(double x, double y, double z) : m_position(x,y,z,0), m_forward(0,
 
 void Camera::rotate_y(double angle) {
     Vector4D x_ax(1,0,0,0);
+    Vector4D y_ax(0,1,0,0);
     m_up.normalize();
     m_forward.rotate(angle, m_up);
     m_up = m_forward.cross_product(x_ax);

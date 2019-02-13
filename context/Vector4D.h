@@ -27,6 +27,7 @@ public:
     Vector4D operator*(double val) const;
     Vector4D operator+(const Vector4D &other) const;
     Vector4D operator-(const Vector4D &other) const;
+    bool operator==(const Vector4D &other) const;
 
     void set(int i, double val);
     double get_x() const;

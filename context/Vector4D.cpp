@@ -126,7 +126,7 @@ Vector4D &Vector4D::yrotate(double angle) {
 }
 
 void Vector4D::apply_perspective() {
-    if(m_w < 1)
+    if(m_w < 0)
         return;
     m_x /= m_w;
     m_y /= m_w;
@@ -145,6 +145,14 @@ Vector4D &Vector4D::rotate(double angle, const Vector4D &axis) {
     m_z = apply.get_z();
 
     return *this;
+}
+
+bool Vector4D::operator==(const Vector4D &other) const {
+    if(m_x != other.get_x()) return false;
+    if(m_y != other.get_y()) return false;
+    if(m_z != other.get_z()) return false;
+    if(m_w != other.get_w()) return false;
+    return true;
 }
 
 //Vector4D::Vector4D() : m_x(0), m_y(0), m_z(0), m_w(0){}

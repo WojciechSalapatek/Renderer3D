@@ -41,17 +41,17 @@ Mesh::Mesh(const Obj &object) {
     }
 }
 
-void Mesh::render(Bitmap &renderer, Matrix &transform, Camera &camera) {
+void Mesh::render(Bitmap &renderer, Matrix &transform, Camera &camera, const Vector4D &light_dir) {
     for (int i = 0; i < m_ordered_points.size(); i+=3) {
         Matrix cam_rot = Matrix::camera_rotation_matrix(camera.get_forward(), camera.get_up());
         Matrix cam_trans = Matrix::translation_matrix(-camera.get_position().get_x(),-camera.get_position().get_y(),-camera.get_position().get_z());
-        Matrix t = transform;
-        t.mul(cam_rot);
+        Matrix t = cam_rot;
         t.mul(cam_trans);
+        t.mul(transform);
         Point p1 = m_ordered_points[i].transform(t);
         Point p2 = m_ordered_points[i+1].transform(t);
         Point p3 = m_ordered_points[i+2].transform(t);
-        renderer.draw_triangle(p1,p2,p3);
+        renderer.draw_triangle(p1,p2,p3, light_dir);
     }
 
 

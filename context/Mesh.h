@@ -14,7 +14,7 @@
 class Mesh {
 public:
     explicit Mesh(const Obj &object);
-    void render(Bitmap &renderer, Matrix &transform, Camera &camera);
+    void render(Bitmap &renderer, Matrix &transform, Camera &camera, const Vector4D &light_dir);
 
 private:
     vector<Point> m_ordered_points;

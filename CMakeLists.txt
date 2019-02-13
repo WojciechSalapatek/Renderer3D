@@ -13,5 +13,6 @@ add_executable(Renderer main.cpp bitmap/Bitmap.cpp bitmap/Bitmap.h context/Point
         context/Point.h context/Vector4D.h context/Vector4D.cpp context/Matrix.cpp
         context/Matrix.h context/Edge.h context/Edge.cpp util/Obj.cpp util/Obj.h
         context/Mesh.cpp context/Mesh.h util/Interpolator.cpp util/Interpolator.h
-        context/Quaternion.cpp context/Quaternion.h context/Camera.cpp context/Camera.h)
+        context/Quaternion.cpp context/Quaternion.h context/Camera.cpp context/Camera.h
+        context/Display.cpp context/Display.h)
 target_link_libraries(Renderer ${SDL2_LIBRARIES})

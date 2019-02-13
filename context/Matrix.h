@@ -23,10 +23,13 @@ public:
     static Matrix to_pixels_matrix(unsigned int width, unsigned int height);
     static Matrix camera_rotation_matrix(Vector4D &forward, Vector4D &up);
     Matrix &mul(Matrix &other);
+    double det3x3();
+    Matrix inv_transp3x3();
     double get(int i, int j) const;
     double set(int i, int j, double val);
 
     Vector4D& operator*(Vector4D &other);
+    Matrix& operator*(double val);
 
 private:
     vector<double> m_data;

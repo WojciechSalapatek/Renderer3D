@@ -19,14 +19,13 @@ public:
     const unsigned int get_width() const;
     const vector<unsigned char> &get_pixels() const;
     void set_pixel(unsigned int x, unsigned int y, unsigned char r, unsigned char g, unsigned char b, unsigned char a);
-    void draw_triangle(Point &p1, Point &p2, Point &p3);
-    void draw_sorted_triangle(Point &p1, Point &p2, Point &p3);
+    void draw_triangle(Point &p1, Point &p2, Point &p3, const Vector4D &light_dir);
+    void draw_sorted_triangle(Point &p1, Point &p2, Point &p3, const Vector4D &light_dir);
     void clear();
-    void render_obj(const Obj &object, Matrix&transform);
 private:
-    void draw_edge(Edge &left, Edge &right, unsigned int y, unsigned char);
-    const unsigned int m_height;
-    const unsigned int m_width;
+    void draw_edge(Edge &left, Edge &right, unsigned int y, const Vector4D &light_dir);
+    unsigned int m_height;
+    unsigned int m_width;
     vector<unsigned char> m_pixels;
     vector<double> m_depth_buffer;
 };

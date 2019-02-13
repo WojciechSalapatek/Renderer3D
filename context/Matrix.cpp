@@ -127,6 +127,27 @@ Matrix Matrix::camera_rotation_matrix(Vector4D &forward, Vector4D &up) {
     return Matrix(data);
 }
 
+double Matrix::det3x3() {
+    return m_data[0]*m_data[5]*m_data[10] + m_data[4]*m_data[9]*m_data[2] + m_data[8]*m_data[1]*m_data[6] -
+           m_data[2]*m_data[5]*m_data[8] - m_data[6]*m_data[9]*m_data[0] - m_data[10]*m_data[1]*m_data[4];
+}
+
+Matrix Matrix::inv_transp3x3() {
+    vector<double> data(16,0);
+    data[0] = m_data[5]*m_data[10]-m_data[9]*m_data[6];   data[1] = -m_data[4]*m_data[10]+m_data[8]*m_data[6];   data[2] = m_data[4]*m_data[9]-m_data[8]*m_data[5];
+    data[4] = -m_data[1]*m_data[10]+m_data[9]*m_data[2];  data[5] = m_data[0]*m_data[10]-m_data[8]*m_data[2];    data[6] = -m_data[0]*m_data[9]+m_data[8]*m_data[1];
+    data[8] = m_data[1]*m_data[6]-m_data[5]*m_data[2];    data[9] = -m_data[0]*m_data[6]+m_data[4]*m_data[2];    data[10]= m_data[0]*m_data[5]-m_data[4]*m_data[1];
+    data[15] = 1;
+    return Matrix(data)*(1/det3x3());
+}
+
+Matrix &Matrix::operator*(double val) {
+    for(unsigned int i=0;i<16u;++i){
+        m_data[i] *= val;
+    }
+    return *this;
+}
+
 
 
 
