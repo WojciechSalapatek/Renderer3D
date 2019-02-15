@@ -1,6 +1,5 @@
 # Renderer 3D
-Simple 3d engine, uses SDL 2.0 but only to create window and present final rendered bitmap. All manipulations are done on 
-created class bitmap. Basic mesh operations like translation, rotation are supported. Engine implements basic algotithms 
+Simple 3d engine, uses SDL 2.0 but only to create window and present final bitmap. Engine perform rasterization. Basic mesh operations like translation, rotation are supported. Engine implements basic algorithms 
 like z-buffering, Gouraud shading, linear interpolation. User can use
 keyes to manipulate camera. Allows loading meshes from obj file but its scale must be normalized.
 
